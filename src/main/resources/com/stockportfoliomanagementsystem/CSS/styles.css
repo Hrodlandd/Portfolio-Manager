@@ -1,0 +1,245 @@
+.anchorPane{
+    /*-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #158675, #195e53);*/
+    -fx-pref-height: 660;
+    -fx-pref-width: 1200;
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #158675, #133f38);
+}
+
+.container_{
+    -fx-background-color: rgba(255,255,255,0.2);
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+}
+
+.gradientButton{
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #2db09e, #2db09e);
+    -fx-background-radius: 7;
+}
+
+.loginContainer{
+    -fx-background-color: rgba(255,255,255,0.7);
+    -fx-background-radius: 15;
+}
+
+/* Define the default button style */
+.login-button {
+    -fx-background-color: #2db09e;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+}
+
+/* Define the hover (mouse entered) button style */
+.login-button:hover {
+    /*-fx-background-color: #03c62a;*/
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #158675, #195e53);
+    -fx-text-fill: white;
+}
+
+.line-color{
+    -fx-background-color: #283836;
+}
+
+
+.button-transparent {
+    -fx-background-color: rgba(255,255,255,0.2);
+    -fx-background-radius: 15;
+    -fx-text-fill: black;
+}
+
+/* Define the hover (mouse entered) button style */
+.button-transparent:hover {
+    -fx-background-color: rgba(26, 206, 143, 0.71);
+    -fx-background-radius: 15;
+    -fx-text-fill: white;
+}
+
+.svgIcons{
+    -fx-pref-width: 1.333em;
+    -fx-pref-height: 1.333em;
+}
+
+.default-color0.chart-pie {
+    -fx-pie-color: #2db09e;
+}
+
+.default-color1.chart-pie {
+    -fx-pie-color: #aee8a5;
+}
+
+.default-color2.chart-pie {
+    -fx-pie-color: #03c62a;
+}
+
+.default-color3.chart-pie {
+    -fx-pie-color: #158675;
+}
+
+.default-color4.chart-pie {
+    -fx-pie-color: #195e53;
+}
+
+.default-color5.chart-pie {
+    -fx-pie-color: #283836;
+}
+
+.default-color6.chart-pie {
+    -fx-pie-color: #71e75d;
+}
+
+.chart-pie-label-line {
+    -fx-stroke: #000000;
+}
+
+.chart-pie-label {
+    -fx-fill: #000000;
+    -fx-font-weight: bold;
+}
+
+.default-color0.chart-bar {
+    -fx-bar-fill: #2db09e;
+}
+
+/* Line chart */
+
+.default-color0.chart-series-line {
+    -fx-stroke: #2db09e;
+}
+
+.default-color1.chart-series-line {
+    -fx-stroke: #17500d;
+}
+
+.default-color2.chart-series-line {
+    -fx-stroke: #03c62a;
+}
+
+/*Legend color in line chart*/
+
+.default-color0.chart-legend-item-symbol {
+    -fx-background-color: #2db09e;
+}
+
+.default-color1.chart-legend-item-symbol {
+    -fx-background-color: #17500d;
+}
+
+.default-color2.chart-legend-item-symbol {
+    -fx-background-color: #03c62a;
+}
+
+.axis-label {
+    -fx-text-fill: #000000;
+}
+
+/* Change the barchart title font */
+
+.chart-title {
+    -fx-font-family: Calibri;
+    -fx-font-weight: bold;
+}
+
+/* Change the line chart axis labels */
+
+.axis{
+    -fx-fill: #000000;
+    -fx-tick-label-fill: #000000;
+}
+
+.shadow{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10.0,0.0,0.0,10.0);
+}
+
+.selected-button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.selected-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.button_radius {
+    -fx-background-radius: 5;
+}
+
+.table_properties {
+    //-fx-border-radius: 0 0 10 10; /* top-left, top-right, bottom-right, bottom-left */
+    //-fx-background-radius: 0 0 10 10; /* top-left, top-right, bottom-right, bottom-left */
+    -fx-font-family: Calibri;
+    -fx-font-size: 14;
+    -fx-border-color: white;
+}
+
+.table_pane {
+    -fx-background-radius: 10;
+    -fx-background-color: white;
+}
+
+.anchorPane_newWindow{
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #158675, #195e53);
+    -fx-pref-height: 620;
+    -fx-pref-width: 850;
+}
+
+.anchorPane_newWindow_high{
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #158675, #195e53);
+    -fx-pref-height: 820;
+    -fx-pref-width: 850;
+}
+
+.font_calibi{
+    -fx-font-family: Calibri;
+}
+
+.red-button {
+    -fx-background-color: #d05252;
+    -fx-text-fill: #000000;
+}
+
+.red-button:hover {
+    /*-fx-background-color: #03c62a;*/
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #f14e6c, #a80418);
+    -fx-text-fill: white;
+}
+
+.yellow-button {
+    -fx-background-color: #e5e565;
+    -fx-text-fill: #000000;
+}
+
+.yellow-button:hover {
+    /*-fx-background-color: #03c62a;*/
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #d3c441, #b49104);
+    -fx-text-fill: white;
+}
+
+.black_border {
+    -fx-border-color: black;
+}
+
+.selected-button_notTransparent{
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.selected-button_notTransparent:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+}
+
+.container_Button{
+    -fx-background-color: transparent;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+}
+
+.anchorPane_newWindow2{
+    -fx-background-color: #158675;
+    -fx-pref-height: 620;
+    -fx-pref-width: 850;
+}
+
+.text_center{
+    -fx-text-alignment: center;
+}
+
