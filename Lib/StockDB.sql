@@ -1,267 +1,79 @@
-CREATE DATABASE if not exists StockDB;
+-- 1. Таблица поставщиков
+CREATE TABLE IF NOT EXISTS supplier (
+                                        S_ID VARCHAR(10) NOT NULL PRIMARY KEY,
+    S_Name VARCHAR(100),
+    S_Contact VARCHAR(20),
+    Description VARCHAR(255),
+    S_Location VARCHAR(100)
+    );
 
-USE StockDB;
+-- 2. Таблица клиентов
+CREATE TABLE IF NOT EXISTS customer (
+                                        C_ID VARCHAR(10) NOT NULL PRIMARY KEY,
+    C_Name VARCHAR(100),
+    C_Location VARCHAR(100),
+    C_Contact VARCHAR(20)
+    );
 
+-- 3. Таблица товаров (Stock)
+CREATE TABLE IF NOT EXISTS stock (
+                                     P_ID VARCHAR(10) NOT NULL PRIMARY KEY,
+    P_Name VARCHAR(100) NOT NULL,
+    Price_taken DECIMAL(10,2),
+    Selling_price DECIMAL(10,2),
+    Qty INT,
+    P_Description VARCHAR(255),
+    S_ID VARCHAR(10) REFERENCES supplier (S_ID),
+    Total DECIMAL(15,2)
+    );
 
-CREATE TABLE if not exists users
-(
-	User_Id VARCHAR(10) NOT NULL PRIMARY KEY,
-    Username VARCHAR(50) NOT NULL,
-    Password VARCHAR(20),
+-- 4. Таблица пользователей
+CREATE TABLE IF NOT EXISTS users (
+                                     User_Id VARCHAR(10) NOT NULL PRIMARY KEY,
+    Username VARCHAR(100) NOT NULL,
+    Password VARCHAR(100),
     FName VARCHAR(50),
     Lname VARCHAR(50),
     NIC VARCHAR(20),
-    Position VARCHAR(20),
-    Contact VARCHAR(10),
-    Pic longblob
-);
+    Position VARCHAR(50),
+    Contact VARCHAR(20),
+    Pic BYTEA -- В PostgreSQL вместо longblob используется BYTEA
+    );
 
-ALTER TABLE users AUTO_INCREMENT = 1;
+-- 5. Таблицы транзакций
+CREATE TABLE IF NOT EXISTS transactions_cus (
+                                                transaction_id VARCHAR(10) PRIMARY KEY,
+    Date_ DATE,
+    Description VARCHAR(255),
+    Qty INT,
+    Price DECIMAL(10,2),
+    Total DECIMAL(15,2),
+    C_ID VARCHAR(10) REFERENCES customer (C_ID),
+    P_ID VARCHAR(10) REFERENCES stock (P_ID)
+    );
 
-DELIMITER $$
+CREATE TABLE IF NOT EXISTS temp_invoice (
+                                            transaction_id VARCHAR(10) PRIMARY KEY,
+    Date_ DATE,
+    Description VARCHAR(255),
+    Qty INT,
+    Price DECIMAL(10,2),
+    Total DECIMAL(15,2),
+    C_ID VARCHAR(10) REFERENCES customer (C_ID),
+    P_ID VARCHAR(10) REFERENCES stock (P_ID)
+    );
 
-CREATE TRIGGER set_user_id
-BEFORE INSERT ON users FOR EACH ROW
-BEGIN
-  SET NEW.User_Id = CONCAT('U', LPAD(NEW.User_Id, 3, '0'));
-END;
-$$
+-- 6. Заполнение тестовыми данными (ВАЖНО для работы Java-кода)
+-- Добавляем поставщиков
+INSERT INTO supplier (S_ID, S_Name, S_Contact, Description, S_Location) VALUES
+                                                                            ('S001', 'Sammanee', '076-3963385', 'books', 'Colombo'),
+                                                                            ('S002', 'Atlas', '071-4563218', 'water bottle', 'Rathnapura');
 
-DELIMITER ;
+-- Добавляем товары (ID должны быть P001, P002 и т.д., чтобы Java их видела)
+INSERT INTO stock (P_ID, P_Name, Price_taken, Selling_price, Qty, S_ID, Total) VALUES
+                                                                                   ('P001', 'Blue Pens', 35.00, 40.00, 200, 'S001', 8000.00),
+                                                                                   ('P002', 'Pencils', 16.00, 20.00, 400, 'S002', 8000.00);
 
-INSERT INTO users
-(User_id, Username, Password, FName, Lname, NIC, Position, Contact, Pic)
-VALUES
-
-("1","randil@gmail.com","Randil@123", "Randil", "Hasanga", "364852648V","Stock keeper", "0711234567", null),
-("2","vinod@gmail.com","Vinod@123", "Vinod", "Kavinda", "364826374V","HR Manager", "0711254347",null),
-("3","dinuka@gmail.com","Dinuka@123", "Dinuka", "Dulanjana", "1234356789345","Accounting Manager", "0711234647",null),
-("4","deshani@gmail.com","Deshani@123", "Deshani", "Bandara", "1234356453v","Portfolio Manager", "0711254634",null);
-
-
-CREATE TABLE if not exists customer (
-  C_ID varchar(5) NOT NULL PRIMARY KEY,
-  C_Name varchar(15) DEFAULT NULL,
-  C_Location varchar(10) DEFAULT NULL,
-  C_Contact VARCHAR(15) DEFAULT NULL
-);
-
-ALTER TABLE customer AUTO_INCREMENT = 1;
-
-DELIMITER $$
-
-CREATE TRIGGER set_Cus_id
-BEFORE INSERT ON customer FOR EACH ROW
-BEGIN
-  SET NEW.C_ID = CONCAT('C_', LPAD(NEW.C_ID, 3, '0'));
-END;
-$$
-
-DELIMITER ;
-
-INSERT INTO customer
-VALUES
-('1','Samanthi','Matara','715214560');
-
-CREATE TABLE if not exists supplier (
-  S_ID varchar(5) NOT NULL PRIMARY KEY,
-  S_Name varchar(20) DEFAULT NULL,
-  S_Contact varchar(15) DEFAULT NULL,
-  Description varchar(25) DEFAULT NULL,
-  S_Location varchar(15) DEFAULT NULL
-);
-
-ALTER TABLE supplier AUTO_INCREMENT = 1;
-
-DELIMITER $$
-
-CREATE TRIGGER set_Sup_id
-BEFORE INSERT ON supplier FOR EACH ROW
-BEGIN
-  SET NEW.S_ID = CONCAT('S', LPAD(NEW.S_ID, 3, '0'));
-END;
-$$
-
-DELIMITER ;
-  
-INSERT INTO supplier
-VALUES
-('1','Sammanee','076-3963385','books','Colobmo'),
-('2','Atlas','071-4563218','water bottle','rathnapura'),
-('3','Weerodara','076-7895412','pen, pencil','Anuradhapura'),
-('4','Promate','078-8521456','bags','Matara');
-
-CREATE TABLE if not exists report (
-  R_ID varchar(5) NOT NULL PRIMARY KEY,
-  Date_ date,
-  pdf longblob default null
-);
-ALTER TABLE report AUTO_INCREMENT = 1;
-
-DELIMITER $$
-
-CREATE TRIGGER R_ID
-BEFORE INSERT ON report FOR EACH ROW
-BEGIN
-  SET NEW.R_ID = CONCAT('R_', LPAD(NEW.R_ID, 3, '0'));
-END;
-$$
-
-DELIMITER ;
-
-
-CREATE TABLE if not exists stock (
-  P_ID varchar(5) NOT NULL PRIMARY KEY,
-  P_Name varchar(20) DEFAULT NULL,
-  Price_taken DECIMAL(5,2),
-  Selling_price DECIMAL(5,2) DEFAULT NULL,
-  Qty INT DEFAULT NULL,
-  P_Description varchar(15) DEFAULT NULL,
-  S_ID varchar(5) DEFAULT NULL,
-  Total DECIMAL(10,2),
-  FOREIGN KEY (S_ID) REFERENCES supplier (S_ID)
-);
-
-INSERT INTO stock
-VALUES
-('1','CR pg120 SR',140.00,150.00,100,NULL,'S001',15000.00),
-('2','CR pg80 SR',90.00,100.00,200,NULL,'S002',20000.00),
-('3','CR pg80 SQR',92.00,100.00,200,NULL,'S003',20000),
-('4','Blue pens',35.00,40.00,200,NULL,'S004',8000.00),
-('5','Pencils',16.00,20.00,400,NULL,'S003',8000);
-
-
-ALTER TABLE stock AUTO_INCREMENT = 1;
-
-DELIMITER $$
-
-CREATE TRIGGER P_ID
-BEFORE INSERT ON stock FOR EACH ROW
-BEGIN
-  SET NEW.P_ID = CONCAT('P', LPAD(NEW.P_ID, 3, '0'));
-END;
-$$
-
-DELIMITER ;
-
-CREATE TABLE if not exists transactions_sup (
-  transaction_id CHAR(6),
-  Date_ DATE DEFAULT NULL,
-  L_Name VARCHAR(10) DEFAULT NULL,
-  Description VARCHAR(10) DEFAULT NULL,
-  Qty INT,
-  Price DECIMAL(10,2) DEFAULT NULL,
-  Total DECIMAL(10,2),
-  S_ID VARCHAR(5) DEFAULT NULL,
-  P_ID VARCHAR(5),
-  PRIMARY KEY (transaction_id),
-  FOREIGN KEY (S_ID) REFERENCES supplier (S_ID),
-  FOREIGN KEY (P_ID) REFERENCES stock (P_ID)
-);
-
--- Set the initial Invoice_id value to 'I_001'
-ALTER TABLE transactions_sup AUTO_INCREMENT = 1;
-
-DELIMITER $$
-
-CREATE TRIGGER set_transaction_id_sup
-BEFORE INSERT ON transactions_sup FOR EACH ROW
-BEGIN
-  SET NEW.transaction_id = CONCAT('T_', LPAD(NEW.transaction_id, 3, '0'));
-END;
-$$
-
-DELIMITER ;
-
-CREATE TABLE if not exists transactions_cus (
-  transaction_id CHAR(6),
-  Date_ DATE DEFAULT NULL,
-  Description VARCHAR(10) DEFAULT NULL,
-  Qty INT,
-  Price DECIMAL(10,2) DEFAULT NULL,
-  Total DECIMAL(10,2),
-  C_ID VARCHAR(5) DEFAULT NULL,
-  P_ID VARCHAR(5),
-  PRIMARY KEY (transaction_id),
-  FOREIGN KEY (C_ID) REFERENCES customer (C_ID),
-  FOREIGN KEY (P_ID) REFERENCES stock (P_ID)
-);
-
-
--- Set the initial Invoice_id value to 'I_001'
-ALTER TABLE transactions_cus AUTO_INCREMENT = 1;
-
-DELIMITER $$
-
-CREATE TRIGGER set_transaction_id_cus
-BEFORE INSERT ON transactions_cus FOR EACH ROW
-BEGIN
-  SET NEW.transaction_id = CONCAT('T_', LPAD(NEW.transaction_id, 3, '0'));
-END;
-$$
-
-DELIMITER ;
-
-CREATE TABLE if not exists temp_invoice (
-  transaction_id CHAR(6),
-  Date_ DATE DEFAULT NULL,
-  Description VARCHAR(10) DEFAULT NULL,
-  Qty INT,
-  Price DECIMAL(10,2) DEFAULT NULL,
-  Total DECIMAL(10,2),
-  C_ID VARCHAR(5) DEFAULT NULL,
-  P_ID VARCHAR(5),
-  PRIMARY KEY (transaction_id),
-  FOREIGN KEY (C_ID) REFERENCES customer (C_ID),
-  FOREIGN KEY (P_ID) REFERENCES stock (P_ID)
-);
-
-ALTER TABLE temp_invoice AUTO_INCREMENT = 1;
-
-DELIMITER $$
-
-CREATE TRIGGER set_transaction_id_temp
-BEFORE INSERT ON temp_invoice FOR EACH ROW
-BEGIN
-  SET NEW.transaction_id = CONCAT('T_', LPAD(NEW.transaction_id, 3, '0'));
-END;
-$$
-
-DELIMITER ;
-
-CREATE TABLE PDF_invoices (
-    invoice_id INT AUTO_INCREMENT PRIMARY KEY,
-    date_ DATE,
-    C_ID VARCHAR(5),
-    pdf LONGBLOB
-);
-
-CREATE TABLE if not exists temp_invoice_sup (
-  transaction_id CHAR(6),
-  Date_ DATE DEFAULT NULL,
-  Description VARCHAR(10) DEFAULT NULL,
-  Qty INT,
-  Price DECIMAL(10,2) DEFAULT NULL,
-  Total DECIMAL(10,2),
-  S_ID VARCHAR(5) DEFAULT NULL,
-  P_ID VARCHAR(5),
-  PRIMARY KEY (transaction_id),
-  FOREIGN KEY (S_ID) REFERENCES supplier (S_ID),
-  FOREIGN KEY (P_ID) REFERENCES stock (P_ID)
-);
-
-ALTER TABLE temp_invoice_sup AUTO_INCREMENT = 1;
-
-DELIMITER $$
-
-CREATE TRIGGER set_transaction_id_temp_sup
-BEFORE INSERT ON temp_invoice_sup FOR EACH ROW
-BEGIN
-  SET NEW.transaction_id = CONCAT('T_', LPAD(NEW.transaction_id, 3, '0'));
-END;
-$$
-
-DELIMITER ;
-
-
-
+-- Добавляем пользователя для входа
+INSERT INTO users (User_Id, Username, Password, Position) VALUES
+    ('U001', 'admin', 'admin123', 'Stock keeper');
